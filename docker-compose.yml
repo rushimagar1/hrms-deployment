@@ -2,7 +2,7 @@ version: '3.4'
  
 services:
   springboot-service:
-    image: shamkumbhar47/backend:githubactionb
+    image: rushimagar1/backend:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-service:3306/hrmsportal
       SPRING_DATASOURCE_USERNAME: root
@@ -15,7 +15,7 @@ services:
       - mynetwork
    
   frontend:
-    image: shamkumbhar47/frontend:hrmstej04
+    image: rushimagar1/frontend:latest
     ports:
       - "4200:80"
     depends_on:
