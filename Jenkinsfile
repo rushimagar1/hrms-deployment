@@ -33,36 +33,37 @@ pipeline {
       }
 
       stage('Build & Push Docker Images') {
-          parallel {
-              stage('Backend Docker Image') {
-                  steps {
-                      dir('Backend_hrms') {
-                          script {
-                              def backendImage = docker.build("${BACKEND_IMAGE}:${IMAGE_TAG}")
-                              docker.withRegistry('https://registry.hub.docker.com', 'DockerPass') {
-                                  backendImage.push()
-                                  backendImage.push('latest')
-                              }
-                          }
-                      }
-                  }
-              }
+    parallel {
+        stage('Backend Docker Image') {
+            steps {
+                dir('Backend_hrms') {
+                    script {
+                        def backendImage = docker.build("${BACKEND_IMAGE}:${IMAGE_TAG}")
+                        docker.withRegistry('https://registry.hub.docker.com', 'DockerPass') {
+                            backendImage.push()
+                            backendImage.push('latest')
+                        }
+                    }
+                }
+            }
+        }
 
-              stage('Frontend Docker Image') {
-                  steps {
-                      dir('frontend') {
-                          script {
-                              def frontendImage = docker.build("${FRONTEND_IMAGE}:${IMAGE_TAG}")
-                              docker.withRegistry('https://registry.hub.docker.com', 'DockerPass') {
-                                  frontendImage.push()
-                                  frontendImage.push('latest')
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
+        stage('Frontend Docker Image') {
+            steps {
+                dir('frontend') {
+                    script {
+                        def frontendImage = docker.build("${FRONTEND_IMAGE}:${IMAGE_TAG}")
+                        docker.withRegistry('https://registry.hub.docker.com', 'DockerPass') {
+                            frontendImage.push()
+                            frontendImage.push('latest')
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
       stage('Deploy with Docker Compose') {
           steps {
